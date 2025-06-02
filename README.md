@@ -1,8 +1,8 @@
-# BLENDED LEARNING
-# Implementation of Support Vector Machine for Classifying Food Choices for Diabetic Patients
+# BLENDED_LEARNING
+# Implementation of Decision Tree Model for Tumor Classification
 
 ## AIM:
-To implement a Support Vector Machine (SVM) model to classify food items and optimize hyperparameters for better accuracy.
+To implement and evaluate a Decision Tree model to classify tumors as benign or malignant using a dataset of lab test results.
 
 ## Equipments Required:
 1. Hardware – PCs
@@ -10,101 +10,87 @@ To implement a Support Vector Machine (SVM) model to classify food items and opt
 
 ## Algorithm
 1. **Load Data**  
-   Import and prepare the dataset to initiate the analysis workflow.
+   Import the dataset to initiate the analysis.
 
 2. **Explore Data**  
-   Examine the data to understand key patterns, distributions, and feature relationships.
+   Examine the dataset to identify patterns, distributions, and relationships.
 
 3. **Select Features**  
-   Choose the most impactful features to improve model accuracy and reduce complexity.
+   Determine the most important features to enhance model accuracy and efficiency.
 
 4. **Split Data**  
-   Partition the dataset into training and testing sets for validation purposes.
+   Separate the dataset into training and testing sets for effective validation.
 
-5. **Scale Features**  
-   Normalize feature values to maintain consistent scales, ensuring stability during training.
+5. **Train Model**  
+   Use the training data to build and train the model.
 
-6. **Train Model with Hyperparameter Tuning**  
-   Fit the model to the training data while adjusting hyperparameters to enhance performance.
+6. **Evaluate Model**  
+   Measure the model’s performance on the test data with relevant metrics.
 
-7. **Evaluate Model**  
-   Assess the model’s accuracy and effectiveness on the testing set using performance metrics.
 
 ## Program:
 ```
 /*
-Program to implement SVM for food classification for diabetic patients.
+Program to  implement a Decision Tree model for tumor classification.
 Developed by: Saravana Kumar S
 RegisterNumber: 212224220090
-*/
-```
-```
-# Import necessary libraries
+
+
+# Import the necessary libraries
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Step 1: Load the dataset from the URL
-url = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-ML241EN-SkillsNetwork/labs/datasets/food_items_binary.csv"
-data = pd.read_csv(url)
+# Step 1: Load the dataset
+data = pd.read_csv('tumor.cvs')
 
-# Step 2: Data Exploration
-# Display the first few rows and column names for verification
+# Step 2: Explore the dataset
+# Display the first few rows and column names to verify the structure
 print(data.head())
 print(data.columns)
 
-# Step 3: Selecting Features and Target
-# Define relevant features and target column
-features = ['Calories', 'Total Fat', 'Saturated Fat', 'Sugars', 'Dietary Fiber', 'Protein']
-target = 'class'  # Assuming 'class' is binary (suitable or not suitable for diabetic patients)
+# Step 3: Select features and target variable
+# Drop 'id' and other non-feature columns, using 'diagnosis' as the target
+X = data.drop(columns=['Class'])  # Remove any irrelevant columns like 'id'
+y = data['Class']  # The target column indicating benign or malignant diagnosis
 
-X = data[features]
-y = data[target]
-
-# Step 4: Splitting Data
+# Step 4: Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-# Step 5: Feature Scaling
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
+# Step 5: Initialize and train the Decision Tree model
+# Create a Decision Tree Classifier and fit it on the training data
+model = DecisionTreeClassifier(random_state=42)
+model.fit(X_train, y_train)
 
-# Step 6: Model Training with SVM
-# Define and train the SVM model with predefined parameters
-svm_model = SVC(kernel='rbf', C=1, gamma='scale')
-svm_model.fit(X_train, y_train)
+# Step 6: Evaluate the model
+# Predict on the test set and evaluate the results
+y_pred = model.predict(X_test)
 
-# Step 7: Model Evaluation
-# Predicting on the test set
-y_pred = svm_model.predict(X_test)
-
-# Calculate accuracy and print classification metrics
+# Print the accuracy and classification metrics for the model
 accuracy = accuracy_score(y_test, y_pred)
 print("Accuracy:", accuracy)
 print("Classification Report:\n", classification_report(y_test, y_pred))
 
-# Confusion Matrix
+# Step 7: Visualize the Confusion Matrix
+# Generate a heatmap of the confusion matrix for better visualization
 conf_matrix = confusion_matrix(y_test, y_pred)
-sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues", 
-            xticklabels=['Not Suitable', 'Suitable'], yticklabels=['Not Suitable', 'Suitable'])
+sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
 plt.title("Confusion Matrix")
 plt.show()
-
 ```
 
 ## Output:
 
-![Screenshot 2025-05-08 111808](https://github.com/user-attachments/assets/aa8d52ab-7912-4b3d-80eb-59291cc25510)
+![image](https://github.com/user-attachments/assets/5abf4ec4-eb44-4731-9497-79f886c66b70)
 
-![Screenshot 2025-05-08 111816](https://github.com/user-attachments/assets/e3b8440b-a297-4156-863e-e2e9b0a4087b)
+![image](https://github.com/user-attachments/assets/931b583b-266e-4e25-b03e-f3cdd82dc4bb)
 
-![Screenshot 2025-05-08 111822](https://github.com/user-attachments/assets/8d644c1f-7f07-4ac4-9469-2437809fc987)
+![image](https://github.com/user-attachments/assets/60bfcf1f-55ae-4562-b794-11131548fa67)
 
 ## Result:
-Thus, the SVM model was successfully implemented to classify food items for diabetic patients, with hyperparameter tuning optimizing the model's performance.
+Thus, the Decision Tree model was successfully implemented to classify tumors as benign or malignant, and the model’s performance was evaluated.
